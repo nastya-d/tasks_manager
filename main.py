@@ -1,16 +1,59 @@
-# This is a sample Python script.
+from models import Task
+from database import *
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+def main():
+    print('hello! i am your tasks manager! what you want to do?')
 
+    con = sqlite3.connect('tasks.db')
+    cursor = con.cursor()
+    cursor.execute("""CREATE TABLE IF NOT EXISTS tasks_manager
+                        (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        task TEXT,
+                        status BOOLEAN)
+                    """)
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+    print('1 - add, 2 - update task, 3 - update status, 4 - delete task, 5 - return task, 6 - return all tasks, 0 - exit')
+    query = input()
+    while query != '0':
+        if query == '1':
+            print('enter your task')
+            text = input()
+            add_new_task(con, text)
+        elif query == '2':
+            print('what task do you want to change?')
+            id_task = int(input())
+            print('enter new task')
+            new_text = input()
+            update_task(con, id_task, new_text)
+        elif query == '3':
+            print('which task is status should i change?')
+            id_task = int(input())
+            print('you completed the task? (да or нет)')
+            answer = input()
+            if answer == 'yes':
+                update_status(con, id_task, True)
+            else:
+                update_status(con, id_task, False)
+        elif query == '4':
+            print('which task to delete?')
+            id_task = int(input())
+            delete_task(con, id_task)
+        elif query == '5':
+            print('what task to look at?')
+            id_task = int(input())
+            task = get_task_by_id(con, id_task)
+            print(task)
+        elif query == '6':
+            tasks = select_tasks(con)
+            for i in tasks:
+                print(i)
+        else:
+            print('i do not understand...')
 
+        print('enter new query')
+        print('1 - add, 2 - update task, 3 - update status, 4 - delete task, 5 - return task, 6 - return all tasks, 0 - exit')
+        query = input()
+    print('thank you!')
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    main()

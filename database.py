@@ -11,9 +11,9 @@ def add_new_task(connect, text):
             (?, ?);
         """, (text, False,))
         connect.commit()
-        print('Success!')
+        print('success!')
     except sqlite3.DatabaseError as err:
-        print('Error: ', err)
+        print('error: ', err)
 
 def update_task(connect, id_task, text):
     cursor = connect.cursor()
@@ -27,9 +27,9 @@ def update_task(connect, id_task, text):
             id = ?
         """, (text, id_task,))
         connect.commit()
-        print('Success!')
+        print('success!')
     except sqlite3.DatabaseError as err:
-        print('Error: ', err)
+        print('error: ', err)
 
 def update_status(connect, id_task, new_status):
     cursor = connect.cursor()
@@ -43,9 +43,9 @@ def update_status(connect, id_task, new_status):
                id = ?
            """, (new_status, id_task,))
         connect.commit()
-        print('Success!')
+        print('success!')
     except sqlite3.DatabaseError as err:
-        print('Error: ', err)
+        print('error: ', err)
 
 def delete_task(connect, id_task):
     cursor = connect.cursor()
@@ -57,9 +57,9 @@ def delete_task(connect, id_task):
             id = ?
         """, (id_task,))
         connect.commit()
-        print('Success!')
+        print('success!')
     except sqlite3.DatabaseError as err:
-        print('Error: ', err)
+        print('error: ', err)
 
 def select_tasks(connect):
     cursor = connect.cursor()
@@ -89,14 +89,3 @@ def get_task_by_id(connect, id_task):
         return None
     task = Task(row[0], row[1], bool(row[2]))
     return task
-
-if __name__ == '__main__':
-
-    con = sqlite3.connect('tasks.db')
-    cursor = con.cursor()
-    cursor.execute("""CREATE TABLE IF NOT EXISTS tasks_manager
-                    (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    task TEXT,
-                    status BOOLEAN)
-                """)
-
